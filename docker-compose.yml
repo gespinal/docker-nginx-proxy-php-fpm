@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  web:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+        - "8080:80"
+    volumes:
+        - ./site.conf:/etc/nginx/conf.d/default.conf
+        - webdata:/app
+    links:
+        - php
+
+  php:
+    image: php:7.4-fpm
+    container_name: php
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+        - webdata:/app
+
+volumes:
+  webdata:
+    external: false
